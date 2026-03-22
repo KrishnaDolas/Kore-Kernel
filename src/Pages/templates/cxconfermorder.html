@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order Confirmed | Kore & Kernel </title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #fbfaf7;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .wrapper {
+        padding: 24px;
+      }
+      .container {
+        max-width: 640px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+      }
+      .header {
+        background: linear-gradient(135deg, #81c784, #558b2f);
+        color: #ffffff;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+      }
+      .header p {
+        margin-top: 8px;
+        font-size: 15px;
+        opacity: 0.95;
+      }
+      .content {
+        padding: 26px;
+        color: #3e3e3e;
+      }
+      .content p {
+        font-size: 15px;
+        line-height: 1.7;
+      }
+      .highlight {
+        background: #f1f8e9;
+        padding: 14px;
+        border-left: 5px solid #7cb342;
+        border-radius: 8px;
+        margin: 18px 0;
+        font-size: 14px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+      table th {
+        background: #f1ede6;
+        color: #4e342e;
+        padding: 12px;
+        text-align: left;
+      }
+      table td {
+        padding: 12px;
+        border-bottom: 1px dashed #ddd;
+      }
+      .total {
+        margin-top: 18px;
+        padding: 14px;
+        background: #f7f4ef;
+        border-radius: 10px;
+        text-align: right;
+        font-size: 17px;
+        font-weight: bold;
+        color: #33691e;
+      }
+      .thankyou {
+        margin-top: 22px;
+        background: linear-gradient(135deg, #f1f8e9, #fffde7);
+        padding: 18px;
+        border-radius: 12px;
+        text-align: center;
+        font-weight: bold;
+        color: #33691e;
+      }
+      .footer {
+        background: #fafafa;
+        padding: 14px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="header">
+          <h1>🌰 Kore & Kernel </h1>
+          <p>Fresh. Natural. Nutritious.</p>
+        </div>
+
+        <div class="content">
+          <p>Hi <strong>{{customer_name}}</strong>,</p>
+
+          <p>
+            Your order <strong>#{{order_id}}</strong> has been successfully
+            placed! We’re carefully preparing your
+            <strong>Kore & Kernel </strong> goodies with love 🌿
+          </p>
+
+          <div class="highlight">
+            🥜 100% natural ingredients 🌿 No preservatives ❤️ Packed fresh for
+            you
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{items}}
+            </tbody>
+          </table>
+
+          <div class="total">Total Paid: ₹{{total}}</div>
+
+          <div class="thankyou">
+            Thank you for choosing healthy food 🌰 — Team Kore & Kernel 
+          </div>
+        </div>
+
+        <div class="footer">© {{year}} Kore & Kernel  • Eat Clean, Stay Healthy</div>
+      </div>
+    </div>
+  </body>
+</html>

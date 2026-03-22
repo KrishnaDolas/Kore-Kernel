@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Order | Kore & Kernel </title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #fbfaf7;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .wrapper {
+        padding: 24px;
+      } Hi! Welcome to Kore & Kernel . Browse our products below and add to your order!
+      .container {
+        max-width: 640px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+      }
+      .header {
+        background: linear-gradient(135deg, #6d4c41, #8d6e63);
+        color: #ffffff;
+        padding: 28px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 26px;
+        letter-spacing: 1px;
+      }
+      .header p {
+        margin-top: 6px;
+        font-size: 14px;
+        opacity: 0.9;
+      }
+      .content {
+        padding: 24px;
+        color: #3e3e3e;
+      }
+      .info {
+        background: #f7f4ef;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 14px;
+        margin-bottom: 18px;
+      }
+      .info p {
+        margin: 6px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+      table th {
+        background: #f1ede6;
+        color: #5d4037;
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+      }
+      table td {
+        padding: 12px;
+        border-bottom: 1px dashed #ddd;
+      }
+      .total {
+        margin-top: 18px;
+        padding: 14px;
+        background: #f1ede6;
+        border-radius: 10px;
+        text-align: right;
+        font-size: 17px;
+        font-weight: bold;
+        color: #4e342e;
+      }
+      .footer {
+        background: #fafafa;
+        padding: 14px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <div class="header">
+          <h1>🌰 Kore & Kernel </h1>
+          <p>New Food Order Received</p>
+        </div>
+
+        <div class="content">
+          <div class="info">
+            <p><strong>Customer:</strong> {{customer_name}}</p>
+            <p><strong>Email:</strong> {{customer_email}}</p>
+            <p><strong>Order ID:</strong> {{order_id}}</p>
+            <p><strong>Order Date:</strong> {{order_date}}</p>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{items}}
+            </tbody>
+          </table>
+
+          <div class="total">Total Order Value: ₹{{total}}</div>
+        </div>
+
+        <div class="footer">Kore & Kernel  • Wholesome Food • Naturally Yours 🌿</div>
+      </div>
+    </div>
+  </body>
+</html>
