@@ -27,60 +27,58 @@ export function WhatsAppChatWidget() {
   // Track selected variant for each product
   const [selectedVariants, setSelectedVariants] = useState({});
 
- const addProduct = (product, variantIndex = 0) => {
-  let productToAdd;
+  const addProduct = (product, variantIndex = 0) => {
+    let productToAdd;
 
-  if (product.variants && product.variants.length > 0) {
-    const variant = product.variants[variantIndex];
-    productToAdd = {
-      id: `${product.id}-${variant.sku}`,
-      name: `${product.name} (${variant.weight})`,
-      price: variant.price,
-      image: variant.image,
-      sku: variant.sku,
-      weight: variant.weight,
-      inStock: variant.inStock,
-    };
-  } else {
-    productToAdd = product;
-  }
-
-  setSelectedProducts((prev) => {
-    const existing = prev.find((p) => p.id === productToAdd.id);
-
-    if (existing) {
-      return prev.map((p) =>
-        p.id === productToAdd.id ? { ...p, qty: p.qty + 1 } : p
-      );
+    if (product.variants && product.variants.length > 0) {
+      const variant = product.variants[variantIndex];
+      productToAdd = {
+        id: `${product.id}-${variant.sku}`,
+        name: `${product.name} (${variant.weight})`,
+        price: variant.price,
+        image: variant.image,
+        sku: variant.sku,
+        weight: variant.weight,
+        inStock: variant.inStock,
+      };
+    } else {
+      productToAdd = product;
     }
 
-    return [...prev, { ...productToAdd, qty: 1 }];
-  });
-};
+    setSelectedProducts((prev) => {
+      const existing = prev.find((p) => p.id === productToAdd.id);
+
+      if (existing) {
+        return prev.map((p) =>
+          p.id === productToAdd.id ? { ...p, qty: p.qty + 1 } : p,
+        );
+      }
+
+      return [...prev, { ...productToAdd, qty: 1 }];
+    });
+  };
 
   const updateQuantity = (productId, change) => {
-  setSelectedProducts((prev) =>
-    prev
-      .map((p) => {
-        if (p.id === productId) {
-          const newQty = p.qty + change;
-          return newQty > 0 ? { ...p, qty: newQty } : null;
-        }
-        return p;
-      })
-      .filter(Boolean)
-  );
-};
+    setSelectedProducts((prev) =>
+      prev
+        .map((p) => {
+          if (p.id === productId) {
+            const newQty = p.qty + change;
+            return newQty > 0 ? { ...p, qty: newQty } : null;
+          }
+          return p;
+        })
+        .filter(Boolean),
+    );
+  };
 
-const removeItem = (productId) => {
-  setSelectedProducts((prev) =>
-    prev.filter((p) => p.id !== productId)
-  );
-};
+  const removeItem = (productId) => {
+    setSelectedProducts((prev) => prev.filter((p) => p.id !== productId));
+  };
 
-const clearCart = () => {
-  setSelectedProducts([]);
-};
+  const clearCart = () => {
+    setSelectedProducts([]);
+  };
 
   const total = selectedProducts.reduce((sum, p) => {
     const price =
@@ -90,47 +88,51 @@ const clearCart = () => {
     return sum + price * p.qty;
   }, 0);
 
- const sendToWhatsApp = () => {
-  // 🚫 Prevent empty cart
-  if (selectedProducts.length === 0) {
-    alert("Your cart is empty. Please add items before placing an order.");
-    return;
-  }
+  const sendToWhatsApp = () => {
+    // 🚫 Prevent empty cart
+    if (selectedProducts.length === 0) {
+      alert("Your cart is empty. Please add items before placing an order.");
+      return;
+    }
 
-  const phoneNumber = "+31633006871";
-  let message = "🛒 *New Order from Kore & Kernel Website*\n\n";
-  message += "📦 *Order Items:*\n";
+    const phoneNumber = "+31633006871";
+    let message = "🛒 *New Order from Kore & Kernel Website*\n\n";
+    message += "📦 *Order Items:*\n";
 
-  selectedProducts.forEach((item, index) => {
-    const price =
-      typeof item.price === "string"
-        ? parseFloat(item.price.replace(/[€,]/g, "")) || 0
-        : item.price;
+    selectedProducts.forEach((item, index) => {
+      const price =
+        typeof item.price === "string"
+          ? parseFloat(item.price.replace(/[€,]/g, "")) || 0
+          : item.price;
 
-    message += `${index + 1}. ${item.name}\n`;
-    message += `   Qty: ${item.qty} × €${price.toFixed(2)} = €${(
-      price * item.qty
-    ).toFixed(2)}\n\n`;
-  });
+      message += `${index + 1}. ${item.name}\n`;
+      message += `   Qty: ${item.qty} × €${price.toFixed(2)} = €${(
+        price * item.qty
+      ).toFixed(2)}\n\n`;
+    });
 
-  message += `💰 *Total: €${total.toFixed(2)}*\n\n`;
-  message += `👤 *Customer Details:*\n`;
-  message += `Name: ${customerInfo.name}\n`;
-  message += `Phone: ${customerInfo.phone}\n`;
-  message += `Address: ${customerInfo.address}\n`;
+    message += `💰 *Total: €${total.toFixed(2)}*\n\n`;
+    message += `👤 *Customer Details:*\n`;
+    message += `Name: ${customerInfo.name}\n`;
+    message += `Phone: ${
+  customerInfo.phone
+    ? customerInfo.phone
+    : "Not provided"
+}\n`;
+    message += `Address: ${customerInfo.address}\n`;
 
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    message
-  )}`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message,
+    )}`;
 
-  window.open(whatsappUrl, "_blank");
+    window.open(whatsappUrl, "_blank");
 
-  // Reset
-  setSelectedProducts([]);
-  setCustomerInfo({ name: "", phone: "", address: "" });
-  setStep("welcome");
-  setIsOpen(false);
-};
+    // Reset
+    setSelectedProducts([]);
+    setCustomerInfo({ name: "", phone: "", address: "" });
+    setStep("welcome");
+    setIsOpen(false);
+  };
 
   if (!isOpen) {
     return (
@@ -152,7 +154,7 @@ const clearCart = () => {
           <WhatsApp className="text-2xl" />
           <div>
             <h3 className="text-sm font-bold">Order via WhatsApp</h3>
-            <p className="text-xs opacity-90">Kore & Kernel  Products</p>
+            <p className="text-xs opacity-90">Kore & Kernel Products</p>
           </div>
         </div>
         <button
@@ -169,8 +171,8 @@ const clearCart = () => {
         <div className="mb-3 flex justify-start">
           <div className="max-w-[80%] rounded-lg rounded-tl-none bg-white p-3 shadow-sm">
             <p className="text-sm text-slate-800">
-              👋 Hi! Welcome to Kore & Kernel . Browse our products below and add to
-              your order!
+              👋 Hi! Welcome to Kore & Kernel . Browse our products below and
+              add to your order!
             </p>
           </div>
         </div>
@@ -257,78 +259,78 @@ const clearCart = () => {
         {/* Cart View */}
         {selectedProducts.length > 0 && step === "welcome" && (
           <div className="mt-3">
-  <div className="mb-2 flex justify-start">
-    <div className="max-w-[80%] rounded-lg rounded-tl-none bg-white p-3 shadow-sm">
-      <p className="text-sm font-bold text-slate-800">
-        🛒 Your Order:
-      </p>
-    </div>
-  </div>
+            <div className="mb-2 flex justify-start">
+              <div className="max-w-[80%] rounded-lg rounded-tl-none bg-white p-3 shadow-sm">
+                <p className="text-sm font-bold text-slate-800">
+                  🛒 Your Order:
+                </p>
+              </div>
+            </div>
 
-  {/* ITEMS */}
-  {selectedProducts.map((product) => {
-    const price =
-      typeof product.price === "string"
-        ? parseFloat(product.price.replace(/[€,]/g, "")) || 0
-        : product.price;
+            {/* ITEMS */}
+            {selectedProducts.map((product) => {
+              const price =
+                typeof product.price === "string"
+                  ? parseFloat(product.price.replace(/[€,]/g, "")) || 0
+                  : product.price;
 
-    return (
-      <div
-        key={product.id}
-        className="mb-2 rounded-lg bg-white p-3 shadow-sm"
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <p className="text-xs font-semibold text-slate-900">
-              {product.name}
-            </p>
-            <p className="text-xs text-slate-500">
-              €{price.toFixed(2)} each
-            </p>
+              return (
+                <div
+                  key={product.id}
+                  className="mb-2 rounded-lg bg-white p-3 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-slate-900">
+                        {product.name}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        €{price.toFixed(2)} each
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {/* Decrease */}
+                      <button
+                        onClick={() => updateQuantity(product.id, -1)}
+                        className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 hover:bg-slate-300"
+                      >
+                        <Remove fontSize="small" />
+                      </button>
+
+                      <span className="w-8 text-center text-sm font-bold">
+                        {product.qty}
+                      </span>
+
+                      {/* Increase */}
+                      <button
+                        onClick={() => updateQuantity(product.id, 1)}
+                        className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600"
+                      >
+                        <Add fontSize="small" />
+                      </button>
+
+                      {/* Remove item */}
+                      <button
+                        onClick={() => removeItem(product.id)}
+                        className="ml-2 text-xs text-red-500 hover:underline"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* ✅ CLEAR CART (ONLY ONCE HERE) */}
+            <button
+              onClick={clearCart}
+              className="mt-3 w-full rounded-full bg-red-500 py-2 text-sm font-bold text-white hover:bg-red-600"
+            >
+              Clear Cart
+            </button>
           </div>
-
-          <div className="flex items-center gap-2">
-            {/* Decrease */}
-            <button
-              onClick={() => updateQuantity(product.id, -1)}
-              className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 hover:bg-slate-300"
-            >
-              <Remove fontSize="small" />
-            </button>
-
-            <span className="w-8 text-center text-sm font-bold">
-              {product.qty}
-            </span>
-
-            {/* Increase */}
-            <button
-              onClick={() => updateQuantity(product.id, 1)}
-              className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600"
-            >
-              <Add fontSize="small" />
-            </button>
-
-            {/* Remove item */}
-            <button
-              onClick={() => removeItem(product.id)}
-              className="ml-2 text-xs text-red-500 hover:underline"
-            >
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  })}
-
-  {/* ✅ CLEAR CART (ONLY ONCE HERE) */}
-  <button
-    onClick={clearCart}
-    className="mt-3 w-full rounded-full bg-red-500 py-2 text-sm font-bold text-white hover:bg-red-600"
-  >
-    Clear Cart
-  </button>
-</div>
         )}
 
         {/* Customer Details Form */}
@@ -354,7 +356,7 @@ const clearCart = () => {
               />
               <input
                 type="tel"
-                placeholder="Phone Number *"
+                placeholder="Phone Number (optional)"
                 value={customerInfo.phone}
                 onChange={(e) =>
                   setCustomerInfo({ ...customerInfo, phone: e.target.value })
@@ -380,12 +382,30 @@ const clearCart = () => {
                 </button>
                 <button
                   onClick={sendToWhatsApp}
-                  disabled={
-                    !customerInfo.name ||
-                    !customerInfo.phone ||
-                    !customerInfo.address
-                  }
-                  className="flex flex-1 items-center justify-center gap-1 rounded-full bg-gradient-to-r from-green-500 to-green-600 py-2 text-sm font-bold text-white hover:from-green-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={!customerInfo.name || !customerInfo.address}
+                  className="
+    flex
+    flex-1
+    items-center
+    justify-center
+    gap-1
+    rounded-full
+    bg-gradient-to-r
+    from-green-500
+    to-green-600
+    py-2
+    text-sm
+    font-bold
+    text-white
+    transition-all
+    duration-300
+
+    hover:from-green-600
+    hover:to-green-700
+
+    disabled:cursor-not-allowed
+    disabled:opacity-50
+  "
                 >
                   <Send fontSize="small" />
                   Send Order
