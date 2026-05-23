@@ -8,7 +8,7 @@ export function WhatsAppContactModal({ open, onClose }) {
   const [name, setName] = useState("");
 
   const handleSendToWhatsApp = () => {
-    const phoneNumber = "918421501905"; // Your WhatsApp number
+    const phoneNumber = "9131633006871"; // Your WhatsApp number
 
     let whatsappMessage = `👋 Hi! I'm ${name || "a customer"}\n\n`;
     whatsappMessage += message || "I'm interested in ordering Kore & Kernel  products. Can you help me?";
@@ -78,7 +78,7 @@ export function WhatsAppContactModal({ open, onClose }) {
 
           <div className="rounded-lg bg-green-50 p-3">
             <p className="text-xs text-green-800">
-              <strong>📱 WhatsApp:</strong> +91-8421-50-1905
+              <strong>📱 WhatsApp:</strong> +-8421-50-1905
             </p>
             <p className="mt-1 text-[10px] text-green-700">
               We typically respond within a few minutes during business hours

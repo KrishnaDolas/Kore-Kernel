@@ -97,7 +97,7 @@ const clearCart = () => {
     return;
   }
 
-  const phoneNumber = "918421501905";
+  const phoneNumber = "+31633006871";
   let message = "🛒 *New Order from Kore & Kernel Website*\n\n";
   message += "📦 *Order Items:*\n";
 

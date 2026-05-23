@@ -15,6 +15,13 @@ import hazelDark1kg from "../assets/Hazelnutdarkchocolate700g.webp";
 
 import almond375 from "../assets/AlmondButter375g.webp";
 
+import picture2 from "../assets/Picture2.png"; // Crunchy Peanut Butter
+import picture3 from "../assets/Picture3.png"; // Hazelnut Dark Chocolate
+import picture4 from "../assets/Picture4.png"; // Hazelnut Milk Chocolate
+import picture5 from "../assets/Picture5.png"; // Creamy Peanut Butter
+import picture6 from "../assets/Picture6.png"; // Almond Butter
+import picture7 from "../assets/Picture7.png"; // Peanut Chocolate
+
 export const PRODUCTS = [
   {
     id: "peanut-butter",
@@ -28,21 +35,21 @@ export const PRODUCTS = [
         sku: "PB-375",
         weight: "375 g",
         price: "4.50€",
-        image: peanut375,
+        image: picture5,
         inStock: true,
       },
       {
         sku: "PB-700",
         weight: "700 g",
         price: "8€",
-        image: peanut700,
+        image: picture5,
         inStock: true,
       },
       {
         sku: "PB-1KG",
         weight: "1 Kg",
         price: "10.50€",
-        image: peanut1kg,
+        image: picture5,
         inStock: true,
       },
     ],
@@ -60,21 +67,21 @@ export const PRODUCTS = [
         sku: "PBC-375",
         weight: "375 g",
         price: "4.50€",
-        image: peanutCrunchy375,
+        image: picture2,
         inStock: true,
       },
       {
         sku: "PBC-700",
         weight: "700 g",
         price: "8€",
-        image: peanutCrunchy700,
+        image: picture2,
         inStock: true,
       },
       {
         sku: "PBC-1KG",
         weight: "1 Kg",
         price: "10.50€",
-        image: peanutCrunchy1kg,
+        image: picture2,
         inStock: true,
       },
     ],
@@ -92,22 +99,21 @@ export const PRODUCTS = [
         sku: "HB-MC-375",
         weight: "375 g",
         price: "10.50€",
-        image: hazelMilk375,
+        image: picture4,
         inStock: true,
       },
-
       {
         sku: "HB-MC-700",
         weight: "700 g",
         price: "19.25€",
-        image: hazelMilk375,
+        image: picture4,
         inStock: true,
       },
       {
         sku: "HB-MC-1KG",
         weight: "1 Kg",
         price: "26.50€",
-        image: hazelMilk375,
+        image: picture4,
         inStock: true,
       },
     ],
@@ -119,27 +125,27 @@ export const PRODUCTS = [
     brand: "Kore & Kernel ",
     category: "Nut Butter",
     description:
-      "Roasted hazelnuts milled into a glossy ganache and infused with 52% dark Belgian chocolate",
+      "80% premium kernels micro-milled with malty Barry Callebaut dark chocolate for ultimate creaminess",
     variants: [
       {
         sku: "HB-DC-375",
         weight: "375 g",
         price: "10.50€",
-        image: hazelDark375,
+        image: picture3,
         inStock: true,
       },
       {
         sku: "HB-DC-700",
         weight: "700 g",
         price: "19.25€",
-        image: hazelDark700,
+        image: picture3,
         inStock: true,
       },
       {
         sku: "HB-DC-1KG",
         weight: "1 Kg",
         price: "26.50€",
-        image: hazelDark1kg,
+        image: picture3,
         inStock: true,
       },
     ],
@@ -150,29 +156,170 @@ export const PRODUCTS = [
     name: "Almond Butter (100%)",
     brand: "Kore & Kernel ",
     category: "Nut Butter",
-    description: "A smooth, single-ingredient masterpiece crafted from slow-roasted almonds and milled to perfection",
+    description:
+      "A smooth, single-ingredient masterpiece crafted from slow-roasted almonds and milled to perfection",
     variants: [
       {
         sku: "AB-375",
         weight: "375 g",
         price: "7.75€",
-        image: almond375,
+        image: picture6,
         inStock: true,
       },
       {
         sku: "AB-700",
         weight: "700 g",
         price: "19.25€",
-        image: almond375,
+        image: picture6,
         inStock: true,
       },
       {
         sku: "AB1KG",
         weight: "1 Kg",
         price: "26.50€",
-        image: almond375,
+        image: picture6,
         inStock: true,
       },
     ],
+  },
+
+  {
+    id: "peanut-chocolate",
+    name: "Peanut Butter (Chocolate)",
+    brand: "Kore & Kernel ",
+    category: "Nut Butter",
+    description:
+      "Rich peanut butter blended with chocolate for a bold and indulgent taste",
+    variants: [
+      {
+        sku: "PB-CH-375",
+        weight: "375 g",
+        price: "6€",
+        image: picture7,
+        inStock: true,
+      },
+      {
+        sku: "PB-CH-700",
+        weight: "700 g",
+        price: "10.50€",
+        image: picture7,
+        inStock: true,
+      },
+      {
+        sku: "PB-CH-1KG",
+        weight: "1 Kg",
+        price: "13.75€",
+        image: picture7,
+        inStock: true,
+      },
+    ],
+  },
+
+  {
+    id: "cashew-spread",
+    name: "100% Cashew",
+    brand: "Kore & Kernel ",
+    category: "Nut Butter",
+    description: "Pure cashew spread",
+    variants: [
+      {
+        sku: "CS-375",
+        weight: "375 g",
+        price: "6.50€",
+        inStock: true,
+      },
+      {
+        sku: "CS-700",
+        weight: "700 g",
+        price: "11.75€",
+        inStock: true,
+      },
+      {
+        sku: "CS-1KG",
+        weight: "1 Kg",
+        price: "15.50€",
+        inStock: true,
+      },
+    ],
+  },
+
+  {
+    id: "almond-dark-chocolate",
+    name: "Almond Dark Chocolate",
+    brand: "Kore & Kernel ",
+    category: "Nut Butter",
+    description:
+      "Almond mixed with premium Belgian dark chocolate",
+    variants: [
+      {
+        sku: "ADC-375",
+        weight: "375 g",
+        price: "8.50€",
+        inStock: true,
+      },
+      {
+        sku: "ADC-700",
+        weight: "700 g",
+        price: "15.50€",
+        inStock: true,
+      },
+      {
+        sku: "ADC-1KG",
+        weight: "1 Kg",
+        price: "21.00€",
+        inStock: true,
+      },
+    ],
+  },
+
+  {
+    id: "almond-milk-chocolate",
+    name: "Almond Milk Chocolate",
+    brand: "Kore & Kernel ",
+    category: "Nut Butter",
+    description:
+      "Almond mixed with premium milk chocolate",
+    variants: [
+      {
+        sku: "AMC-375",
+        weight: "375 g",
+        price: "8.50€",
+        inStock: true,
+      },
+      {
+        sku: "AMC-700",
+        weight: "700 g",
+        price: "15.50€",
+        inStock: true,
+      },
+      {
+        sku: "AMC-1KG",
+        weight: "1 Kg",
+        price: "21.00€",
+        inStock: true,
+      },
+    ],
+  },
+
+  {
+    id: "nut-mix",
+    name: "Nut Mix",
+    brand: "Kore & Kernel ",
+    category: "Nut Butter",
+    description:
+      "A spread made with a mix of almonds, cashews, and peanuts",
+    note: "Please WhatsApp or DM for pricing.",
+    variants: [],
+  },
+
+  {
+    id: "bespoke-service",
+    name: "Bespoke Service",
+    brand: "Kore & Kernel ",
+    category: "Custom",
+    description:
+      "A special service where customers can share their preferred combination, and we create a custom spread for them",
+    note: "Please WhatsApp or DM for pricing.",
+    variants: [],
   },
 ];

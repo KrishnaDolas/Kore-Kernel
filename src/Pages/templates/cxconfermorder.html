@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Order Confirmed | Kore & Kernel </title>
+    <title>Order Confirmed | Kore & Kernel</title>
+
     <style>
       body {
         margin: 0;
@@ -10,9 +11,11 @@
         background-color: #fbfaf7;
         font-family: Arial, Helvetica, sans-serif;
       }
+
       .wrapper {
         padding: 24px;
       }
+
       .container {
         max-width: 640px;
         margin: auto;
@@ -21,29 +24,35 @@
         overflow: hidden;
         box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
       }
+
       .header {
         background: linear-gradient(135deg, #81c784, #558b2f);
         color: #ffffff;
         padding: 30px 20px;
         text-align: center;
       }
+
       .header h1 {
         margin: 0;
         font-size: 28px;
       }
+
       .header p {
         margin-top: 8px;
         font-size: 15px;
         opacity: 0.95;
       }
+
       .content {
         padding: 26px;
         color: #3e3e3e;
       }
+
       .content p {
         font-size: 15px;
         line-height: 1.7;
       }
+
       .highlight {
         background: #f1f8e9;
         padding: 14px;
@@ -52,22 +61,26 @@
         margin: 18px 0;
         font-size: 14px;
       }
+
       table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 15px;
         font-size: 14px;
       }
+
       table th {
         background: #f1ede6;
         color: #4e342e;
         padding: 12px;
         text-align: left;
       }
+
       table td {
         padding: 12px;
         border-bottom: 1px dashed #ddd;
       }
+
       .total {
         margin-top: 18px;
         padding: 14px;
@@ -78,6 +91,7 @@
         font-weight: bold;
         color: #33691e;
       }
+
       .thankyou {
         margin-top: 22px;
         background: linear-gradient(135deg, #f1f8e9, #fffde7);
@@ -87,6 +101,16 @@
         font-weight: bold;
         color: #33691e;
       }
+
+      .address {
+        margin-top: 18px;
+        background: #fafafa;
+        border-radius: 10px;
+        padding: 14px;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
       .footer {
         background: #fafafa;
         padding: 14px;
@@ -96,11 +120,12 @@
       }
     </style>
   </head>
+
   <body>
     <div class="wrapper">
       <div class="container">
         <div class="header">
-          <h1>🌰 Kore & Kernel </h1>
+          <h1>🌰 Kore & Kernel</h1>
           <p>Fresh. Natural. Nutritious.</p>
         </div>
 
@@ -108,37 +133,60 @@
           <p>Hi <strong>{{customer_name}}</strong>,</p>
 
           <p>
+            Thank you for your order with
+            <strong>Kore & Kernel</strong>.
+          </p>
+
+          <p>
             Your order <strong>#{{order_id}}</strong> has been successfully
-            placed! We’re carefully preparing your
-            <strong>Kore & Kernel </strong> goodies with love 🌿
+            received and our team is now preparing it carefully for delivery.
           </p>
 
           <div class="highlight">
-            🥜 100% natural ingredients 🌿 No preservatives ❤️ Packed fresh for
-            you
+            🥜 Premium quality products<br />
+            🌿 Freshly packed<br />
+            ❤️ Prepared with care
           </div>
+
+          <h3>Order Summary</h3>
 
           <table>
             <thead>
               <tr>
-                <th>Item</th>
-                <th>Qty</th>
-                <th>Price</th>
-              </tr>
+  <th>Image</th>
+  <th>Product Details</th>
+  <th>Qty</th>
+  <th>Price</th>
+  <th>Total</th>
+</tr>
             </thead>
+
             <tbody>
-              {{items}}
+              {{{items_table}}}
             </tbody>
           </table>
 
-          <div class="total">Total Paid: ₹{{total}}</div>
+          <div class="total">
+            Total Order Value: €{{total}}
+          </div>
+
+          <div class="address">
+            <strong>Delivery Address:</strong><br />
+
+            {{customer_street}} {{customer_house_no}}<br />
+            {{customer_zip_code}}<br />
+            {{customer_city}}<br />
+            {{customer_country}}
+          </div>
 
           <div class="thankyou">
-            Thank you for choosing healthy food 🌰 — Team Kore & Kernel 
+            Thank you for choosing Kore & Kernel 🌰
           </div>
         </div>
 
-        <div class="footer">© {{year}} Kore & Kernel  • Eat Clean, Stay Healthy</div>
+        <div class="footer">
+          © {{year}} Kore & Kernel • Eat Clean, Stay Healthy
+        </div>
       </div>
     </div>
   </body>

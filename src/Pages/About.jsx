@@ -1,6 +1,6 @@
 ﻿// src/routes/About.jsx
 import React from "react";
-import peanut1kg from "../assets/PeanutButter1Kg.webp";
+import peanut1kg from "../assets/Peanutbuttercrunchy700g.webp";
 import peanut375 from "../assets/PeanutButter375g.webp";
 import hazelDark375 from "../assets/HazelnutButterDarkChocolate375g.webp";
 

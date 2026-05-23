@@ -1,10 +1,15 @@
 // src/Pages/Home.jsx (or src/routes/Home.jsx)
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FoodHero } from "../components/FoodHero";
 import { Accordion } from "../components/ui/Accordion";
 import { Link } from "react-router-dom";
 import { PRODUCTS } from "../data/products";
 import { ProductCard } from "../components/ProductCard";
+
+// ✅ Gift Images
+import gift1 from "../assets/gift1.webp";
+import gift2 from "../assets/gift2.webp";
+import gift3 from "../assets/gift3.webp";
 
 export default function Home() {
   const accordionItems = [
@@ -16,29 +21,54 @@ export default function Home() {
     {
       title: "Why is there oil on top of my jar?",
       content:
-        "That is the golden 'Kore' of the nut! Since we use no palm oil or stabilizers, the natural, heart-healthy oils from the peanuts and hazelnuts will occasionally rise to the top. This is the ultimate proof of a pure product. Simply follow our Stir Ritual to re-integrate the oils and awaken the velvet texture.",
+        "That is the golden 'Kore' of the nut! Since we use no palm oil or stabilizers, the natural, heart-healthy oils from the peanuts and hazelnuts will occasionally rise to the top.",
     },
     {
       title: "Is Kore & Kernel Keto-friendly?",
       content:
-        "Absolutely. Because we have 0% added sugar and 0% added oil, our Pure Range (Almond and Peanuts) is perfectly suited for Keto and low-carb lifestyles. For our 80/20 Chocolate Infusions, the high nut density ensures a much lower glycemic impact than traditional spreads, making them a sophisticated choice for those mindful of sugar intake.",
+        "Absolutely. Because we have 0% added sugar and 0% added oil, our Pure Range is perfectly suited for Keto lifestyles.",
     },
     {
       title: "Do I need to refrigerate the jars?",
       content:
-        "Refrigeration is not required, but the choice is yours: stay room-temp for a silky drizzle, or refrigerate for a dense, fudge-like indulgence.",
+        "Refrigeration is optional—room temp for silky texture or refrigerate for dense indulgence.",
     },
     {
       title: "Are your products Vegan?",
       content:
-        "Our 100% Peanuts, Almond, Hazelnut and Dark Cacao variants are 100% plant-based and Vegan. Our Milk Cacao Hazelnut contains Barry Callebaut S21 milk chocolate, which includes dairy. We take great care to prevent cross-contamination during our precision-milling process.",
+        "Most variants are 100% plant-based except milk chocolate variants.",
     },
     {
       title: "Will the nut butter harden at the bottom?",
       content:
-        "Unlike mass-produced butters that 'seize' and harden at the base of the jar, our precision-milling process ensures the nut particles are so fine they remain suspended. A gentle stir is all it takes to return your butter to its original, silky-smooth state—from the first scoop to the very last.",
+        "Our precision-milling ensures smooth consistency throughout.",
     },
   ];
+
+  const testimonials = [
+    "Great quality, beautiful packaging, and delicious taste. My friend loved the gift, and I loved the peanut butter! Highly recommended. The peanut/almond butter on bread has become my everyday snack with tea.",
+    "After trying Kore & Kernel Peanut butter n Hazelnut pasta with dark chocolate spread, my kids and me loved it.",
+    "You have really maintained the quality, kudos to you 💖",
+    "The almond butter is really yum. Great texture.",
+    "We absolutely love the peanut butter.",
+    "This peanut butter is smooth, creamy, and full of flavor.",
+    "It's absolutely lovely and perfect.",
+    "My daughter loved the hazelnut chocolate spread ❤️",
+    "My kids did a happy dance 😊",
+    "Milk chocolate hazelnut spread is creamy and nutty.",
+    "Chocolate peanut butter is amazing ❤️",
+    "Keeps me full and guilt-free 😊",
+    "Each bite brought me joy 😆",
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % testimonials.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -59,20 +89,13 @@ export default function Home() {
             to="/products"
             className="inline-flex items-center gap-2 text-sm font-bold text-[#BA5C1E] hover:text-[#D97236] transition-colors group"
           >
-            View all products
-            <span className="group-hover:translate-x-1 transition-transform">
-              →
-            </span>
+            View all products →
           </Link>
         </div>
 
-        {/* 4 products per row */}
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {PRODUCTS.map((product, index) => (
-            <div
-              key={product.id}
-              className={`animate-slide-up stagger-${Math.min(index + 1, 4)}`}
-            >
+          {PRODUCTS.map((product) => (
+            <div key={product.id}>
               <ProductCard product={product} />
             </div>
           ))}
@@ -89,57 +112,102 @@ export default function Home() {
             <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
               Radical Transparency. Global Integrity.
             </h2>
-            <p className="mt-3 text-base text-slate-700 leading-relaxed">
-              We don't just make nut butter; we curate the harvest. At Kore & Kernel, our "Pure" philosophy means you never have to wonder what is inside the jar or how it got there.
-            </p>
 
-            {/* Premium 4 Boxes */}
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="group rounded-xl border border-[#BA5C1E]/20 bg-white p-5 shadow-elegant hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#BA5C1E]">
-                  The 100% Nut Promise
-                </h3>
-                <p className="mt-2 text-sm text-slate-600">
-                  Zero added oils, sugars, or salts. We refuse to dilute nature’s perfection with fillers or stabilizers.
-                </p>
+              <div className="rounded-xl border p-5 shadow">
+                <h3 className="font-bold">100% Nut Promise</h3>
               </div>
-
-              <div className="group rounded-xl border border-[#BA5C1E]/20 bg-white p-5 shadow-elegant hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#BA5C1E]">
-                  Global Sourcing of the "Kore"
-                </h3>
-                <p className="mt-2 text-sm text-slate-600">
-                  From the historic groves of Turkey to prime Argentinian fields, we source only where flavor density is highest.
-                </p>
+              <div className="rounded-xl border p-5 shadow">
+                <h3 className="font-bold">Global Sourcing</h3>
               </div>
-
-              <div className="group rounded-xl border border-[#BA5C1E]/20 bg-white p-5 shadow-elegant hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#BA5C1E]">
-                  Precision in Every Particle
-                </h3>
-                <p className="mt-2 text-sm text-slate-600">
-                  Our specialized milling preserves nutrient integrity while creating a micro-fine, velvet texture.
-                </p>
+              <div className="rounded-xl border p-5 shadow">
+                <h3 className="font-bold">Precision Milling</h3>
               </div>
-
-              <div className="group rounded-xl border border-[#BA5C1E]/20 bg-white p-5 shadow-elegant hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 className="text-base font-bold text-slate-900 group-hover:text-[#BA5C1E]">
-                  The Culinary Fluidity
-                </h3>
-                <p className="mt-2 text-sm text-slate-600">
-                  No stabilizers means a natural, silky pour—perfect for a clean drizzle or a seamless culinary blend.
-                </p>
+              <div className="rounded-xl border p-5 shadow">
+                <h3 className="font-bold">Silky Texture</h3>
               </div>
             </div>
           </div>
 
-          {/* FAQ Section */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#BA5C1E]">
-              Frequently Asked Questions
-            </p>
             <Accordion items={accordionItems} />
           </div>
+        </div>
+      </section>
+
+      {/* 🎁 GIFT PACK SECTION (NEW) */}
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <div className="text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#BA5C1E]">
+            Gift Packs
+          </p>
+          <h2 className="mt-2 text-3xl font-bold text-slate-900">
+            Perfect Gifts for Every Occasion 🎁
+          </h2>
+          <p className="mt-3 text-slate-600 max-w-2xl mx-auto">
+            Premium handcrafted nut butter gift boxes curated for festive gifting,
+            corporate hampers, and special occasions.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+          {/* Gift 1 */}
+          <div className="group rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition">
+            <img src={gift1} className="h-72 w-full object-cover group-hover:scale-105 transition" />
+            <div className="p-5">
+              <h3 className="font-bold text-lg">Premium Duo Gift Box</h3>
+              <a
+                href="https://wa.me/+31633006871?text=Hi%20I%20am%20interested%20in%20Premium%20Duo%20Gift%20Box"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 block text-center bg-[#25D366] text-white py-2 rounded-lg"
+              >
+                Enquire on WhatsApp
+              </a>
+            </div>
+          </div>
+
+          {/* Gift 2 */}
+          <div className="group rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition">
+            <img src={gift2} className="h-72 w-full object-cover group-hover:scale-105 transition" />
+            <div className="p-5">
+              <h3 className="font-bold text-lg">Festive Mini Pack</h3>
+              <a
+                href="https://wa.me/+31633006871?text=Hi%20I%20am%20interested%20in%20Festive%20Mini%20Pack"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 block text-center bg-[#25D366] text-white py-2 rounded-lg"
+              >
+                Enquire on WhatsApp
+              </a>
+            </div>
+          </div>
+
+          {/* Gift 3 */}
+          <div className="group rounded-2xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition">
+            <img src={gift3} className="h-72 w-full object-cover group-hover:scale-105 transition" />
+            <div className="p-5">
+              <h3 className="font-bold text-lg">Luxury Gift Hamper</h3>
+              <a
+                href="https://wa.me/+31633006871?text=Hi%20I%20am%20interested%20in%20Luxury%20Gift%20Hamper"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 block text-center bg-[#25D366] text-white py-2 rounded-lg"
+              >
+                Enquire on WhatsApp
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 🔥 TESTIMONIALS */}
+      <section className="relative py-20 bg-gradient-to-br from-[#FFF4EC] via-[#FFF9F5] to-[#FFF4EC]">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <h2 className="text-3xl font-bold">Loved by Customers 💛</h2>
+          <p className="mt-6 italic text-lg">{testimonials[current]}</p>
         </div>
       </section>
     </>

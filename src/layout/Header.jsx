@@ -96,7 +96,7 @@ export function Header() {
 
           {/* Instagram - Far Right */}
           <a
-            href="https://www.instagram.com/the_pure_nut/"
+            href="https://www.instagram.com/kore_kernel"
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-[#BA5C1E]/20 shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:bg-gradient-to-br hover:from-[#BA5C1E] hover:to-[#D97236] hover:text-white text-[#BA5C1E]"

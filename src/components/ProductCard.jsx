@@ -12,13 +12,14 @@ export function ProductCard({ product }) {
   const hasVariants =
     Array.isArray(product.variants) && product.variants.length > 0;
 
+  const isCustomProduct = !hasVariants;
+
   const [selectedVariant, setSelectedVariant] = useState(
     hasVariants ? product.variants[0] : null,
   );
 
   const [quantity, setQuantity] = useState(1);
 
-  // Parse price from string format "4.50€" to number
   const priceString = selectedVariant?.price ?? product.price ?? "0€";
   const price = parseFloat(priceString.replace(/[€,]/g, "")) || 0;
 
@@ -88,7 +89,6 @@ export function ProductCard({ product }) {
         ? `${product.name} (${selectedVariant.weight})`
         : product.name;
 
-    // Add to cart first
     dispatch({
       type: "ADD_TO_CART",
       payload: {
@@ -103,23 +103,24 @@ export function ProductCard({ product }) {
       },
     });
 
-    // Navigate to cart page using React Router
     navigate("/cart");
   };
 
   return (
     <Card className="group flex h-full flex-col overflow-hidden border border-[#BA5C1E]/20 bg-white shadow-elegant hover:shadow-elegant-lg hover:border-[#BA5C1E]/50 transition-all duration-300 hover-lift">
-      {/* Image */}
       <div className="relative aspect-[1/1] w-full overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100/50">
-        {image && (
+        {image ? (
           <img
             src={image}
             alt={product.name}
             className="h-full w-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:rotate-1"
           />
+        ) : (
+          <div className="flex items-center justify-center h-full text-xs text-slate-400">
+            No Image
+          </div>
         )}
 
-        {/* Overlay gradient on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         {inStock ? (
@@ -133,7 +134,6 @@ export function ProductCard({ product }) {
         )}
       </div>
 
-      {/* Content */}
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1">
@@ -151,9 +151,16 @@ export function ProductCard({ product }) {
                 {product.brand}
               </p>
             )}
-            <p className="text-base font-bold text-[#BA5C1E] mt-0.5">
-              €{price.toFixed(2)}
-            </p>
+
+            {isCustomProduct ? (
+              <p className="text-[11px] font-semibold text-[#BA5C1E] mt-0.5">
+                {product.note}
+              </p>
+            ) : (
+              <p className="text-base font-bold text-[#BA5C1E] mt-0.5">
+                €{price.toFixed(2)}
+              </p>
+            )}
           </div>
         </div>
 
@@ -161,7 +168,19 @@ export function ProductCard({ product }) {
           {product.description || product.shortDescription}
         </p>
 
-        {/* Variant selector */}
+        {/* ✅ UPDATED CTA COLOR (brand color instead of green) */}
+        {isCustomProduct && (
+          <div className="mt-3">
+            <Button
+              fullWidth
+              onClick={() => window.open("https://wa.me/", "_blank")}
+              className="w-full text-[11px] font-bold bg-gradient-to-r from-[#BA5C1E] to-[#D97236] hover:from-[#D97236] hover:to-[#BA5C1E] text-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]"
+            >
+              📲 Contact on WhatsApp
+            </Button>
+          </div>
+        )}
+
         {hasVariants && (
           <div className="mt-2 flex flex-wrap gap-1.5">
             {product.variants.map((variant) => (
@@ -202,8 +221,7 @@ export function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Quantity Selector */}
-        {inStock && (
+        {inStock && !isCustomProduct && (
           <div className="mt-3 border-t border-slate-100 pt-3">
             <div className="flex items-center justify-between mb-3">
               <label className="text-[11px] font-semibold text-slate-700">
@@ -239,7 +257,6 @@ export function ProductCard({ product }) {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col gap-2">
               <Button
                 fullWidth
@@ -250,19 +267,10 @@ export function ProductCard({ product }) {
               >
                 🛒 Add to Basket
               </Button>
-              <button
-                type="button"
-                disabled={!inStock || (hasVariants && !selectedVariant)}
-                onClick={handleBuyNow}
-                className="w-full rounded-lg border-2 border-[#BA5C1E] bg-white px-4 py-2 text-[11px] font-bold text-[#BA5C1E] hover:bg-[#BA5C1E] hover:text-white disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400 disabled:bg-slate-50 shadow-md hover:shadow-lg hover:shadow-[#BA5C1E]/30 transition-all duration-300 transform hover:scale-[1.02]"
-              >
-                ⚡ Buy Now
-              </button>
             </div>
           </div>
         )}
 
-        {/* Out of Stock Button */}
         {!inStock && (
           <div className="mt-3">
             <Button

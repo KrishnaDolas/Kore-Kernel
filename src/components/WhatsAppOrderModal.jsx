@@ -16,7 +16,7 @@ export function WhatsAppOrderModal({ open, onClose, cart, total }) {
   };
 
   const handleSendToWhatsApp = () => {
-    const phoneNumber = "918421501905"; // Your WhatsApp number
+    const phoneNumber = "9131633006871"; // Your WhatsApp number
 
     // Create order message
     let message = "🛒 *New Order from Kore & Kernel  Website*\n\n";
