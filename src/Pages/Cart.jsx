@@ -4,11 +4,13 @@ import { CartItem } from "../components/CartItem";
 import { Input } from "../components/ui/Input";
 import { WhatsAppOrderModal } from "../components/WhatsAppOrderModal";
 import emailjs from "@emailjs/browser";
-import logo from "../assets/Logo.webp";
+
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 
-// EmailJS constants
+// =========================
+// EMAILJS
+// =========================
 const EMAILJS_SERVICE_ID = "service_nyx4ons";
 const TEMPLATE_CUSTOMER_ID = "template_lrlw5uo";
 const TEMPLATE_ADMIN_ID = "template_npmwdac";
@@ -17,16 +19,61 @@ const EMAILJS_PUBLIC_KEY = "LCOhbuOkeobyNb5Uo";
 const SHEET_WEBHOOK_URL =
   "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
 
-// ✅ ISD Codes
+// =========================
+// ALL COUNTRY CODES
+// =========================
 const countryCodes = [
-  { code: "+31", country: "NL" },
-  { code: "+91", country: "IN" },
-  { code: "+1", country: "US" },
-  { code: "+44", country: "UK" },
-  { code: "+61", country: "AU" },
-  { code: "+971", country: "UAE" },
-  { code: "+49", country: "DE" },
-  { code: "+33", country: "FR" },
+  { country: "Afghanistan", code: "+93" },
+  { country: "Albania", code: "+355" },
+  { country: "Algeria", code: "+213" },
+  { country: "Argentina", code: "+54" },
+  { country: "Australia", code: "+61" },
+  { country: "Austria", code: "+43" },
+  { country: "Bangladesh", code: "+880" },
+  { country: "Belgium", code: "+32" },
+  { country: "Brazil", code: "+55" },
+  { country: "Canada", code: "+1" },
+  { country: "China", code: "+86" },
+  { country: "Denmark", code: "+45" },
+  { country: "Egypt", code: "+20" },
+  { country: "Finland", code: "+358" },
+  { country: "France", code: "+33" },
+  { country: "Germany", code: "+49" },
+  { country: "Greece", code: "+30" },
+  { country: "Hong Kong", code: "+852" },
+  { country: "India", code: "+91" },
+  { country: "Indonesia", code: "+62" },
+  { country: "Ireland", code: "+353" },
+  { country: "Italy", code: "+39" },
+  { country: "Japan", code: "+81" },
+  { country: "Kenya", code: "+254" },
+  { country: "Malaysia", code: "+60" },
+  { country: "Mexico", code: "+52" },
+  { country: "Nepal", code: "+977" },
+  { country: "Netherlands", code: "+31" },
+  { country: "New Zealand", code: "+64" },
+  { country: "Nigeria", code: "+234" },
+  { country: "Norway", code: "+47" },
+  { country: "Pakistan", code: "+92" },
+  { country: "Philippines", code: "+63" },
+  { country: "Poland", code: "+48" },
+  { country: "Portugal", code: "+351" },
+  { country: "Qatar", code: "+974" },
+  { country: "Russia", code: "+7" },
+  { country: "Saudi Arabia", code: "+966" },
+  { country: "Singapore", code: "+65" },
+  { country: "South Africa", code: "+27" },
+  { country: "South Korea", code: "+82" },
+  { country: "Spain", code: "+34" },
+  { country: "Sri Lanka", code: "+94" },
+  { country: "Sweden", code: "+46" },
+  { country: "Switzerland", code: "+41" },
+  { country: "Thailand", code: "+66" },
+  { country: "Turkey", code: "+90" },
+  { country: "UAE", code: "+971" },
+  { country: "United Kingdom", code: "+44" },
+  { country: "United States", code: "+1" },
+  { country: "Vietnam", code: "+84" },
 ];
 
 export default function Cart() {
@@ -35,16 +82,17 @@ export default function Cart() {
     dispatch,
   } = useStore();
 
+  // =========================
+  // STATES
+  // =========================
   const [customer, setCustomer] = useState({
     name: "",
     company: "",
     email: "",
 
-    // ✅ Mobile
     countryCode: "+31",
     phone: "",
 
-    // ✅ Address
     street: "",
     houseNo: "",
     zipCode: "",
@@ -57,342 +105,511 @@ export default function Cart() {
   const [errors, setErrors] = useState({});
   const [orderPlacedId, setOrderPlacedId] = useState(null);
   const [status, setStatus] = useState("idle");
-  const [whatsappModalOpen, setWhatsappModalOpen] = useState(false);
 
-  // ✅ Result Modal
-  const [resultModalOpen, setResultModalOpen] = useState(false);
-  const [resultType, setResultType] = useState("success");
+  const [whatsappModalOpen, setWhatsappModalOpen] =
+    useState(false);
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const [resultModalOpen, setResultModalOpen] =
+    useState(false);
 
-  // ✅ VALIDATION
+  const [resultType, setResultType] =
+    useState("success");
+
+  // =========================
+  // TOTAL
+  // =========================
+  const total = cart.reduce(
+    (sum, item) =>
+      sum + item.price * item.qty,
+    0
+  );
+
+  // =========================
+  // VALIDATION
+  // =========================
   const validate = () => {
     const newErrors = {};
 
-    // ✅ Name
-    if (!customer.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (!/^[a-zA-Z\s]+$/.test(customer.name.trim())) {
-      newErrors.name = "Only letters allowed";
-    } else if (customer.name.trim().length < 2) {
-      newErrors.name = "Name too short";
+    const trimmedName =
+      customer.name.trim();
+
+    if (!trimmedName) {
+      newErrors.name =
+        "Name is required";
+    } else if (
+      trimmedName.length < 2
+    ) {
+      newErrors.name =
+        "Name too short";
+    } else if (
+      !/^[a-zA-Z\s]+$/.test(
+        trimmedName
+      )
+    ) {
+      newErrors.name =
+        "Only letters allowed";
     }
 
-    // ✅ Email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const trimmedEmail =
+      customer.email.trim();
 
-    if (!emailRegex.test(customer.email.trim())) {
-      newErrors.email = "Enter valid email";
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!trimmedEmail) {
+      newErrors.email =
+        "Email is required";
+    } else if (
+      !emailRegex.test(
+        trimmedEmail
+      )
+    ) {
+      newErrors.email =
+        "Enter valid email";
     }
 
-    // ✅ Phone
-    const cleanedPhone = customer.phone.replace(/\s+/g, "");
+    const cleanedPhone =
+      customer.phone.replace(
+        /\s+/g,
+        ""
+      );
 
     if (!cleanedPhone) {
-      newErrors.phone = "Phone number required";
-    } else if (!/^\d+$/.test(cleanedPhone)) {
-      newErrors.phone = "Only numbers allowed";
-    } else if (cleanedPhone.length < 6 || cleanedPhone.length > 15) {
-      newErrors.phone = "Phone number must be 6-15 digits";
+      newErrors.phone =
+        "Phone required";
+    } else if (
+      !/^\d+$/.test(
+        cleanedPhone
+      )
+    ) {
+      newErrors.phone =
+        "Only numbers allowed";
+    } else if (
+      cleanedPhone.length < 6 ||
+      cleanedPhone.length > 15
+    ) {
+      newErrors.phone =
+        "Phone must be 6-15 digits";
     }
 
-    // ✅ Address validations
-    if (!customer.street.trim()) {
-      newErrors.street = "Street is required";
+    if (
+      !customer.street.trim()
+    ) {
+      newErrors.street =
+        "Street required";
     }
 
-    if (!customer.houseNo.trim()) {
-      newErrors.houseNo = "House number is required";
+    if (
+      !customer.houseNo.trim()
+    ) {
+      newErrors.houseNo =
+        "House number required";
     }
 
-    if (!customer.zipCode.trim()) {
-      newErrors.zipCode = "Zip code is required";
+    if (
+      !customer.zipCode.trim()
+    ) {
+      newErrors.zipCode =
+        "Zip code required";
     }
 
-    if (!customer.city.trim()) {
-      newErrors.city = "City is required";
+    if (
+      !customer.city.trim()
+    ) {
+      newErrors.city =
+        "City required";
     }
 
-    if (!customer.country.trim()) {
-      newErrors.country = "Country is required";
+    if (
+      !customer.country.trim()
+    ) {
+      newErrors.country =
+        "Country required";
     }
 
-    // ✅ Cart
     if (!cart.length) {
-      newErrors.cart = "Your basket is empty";
+      newErrors.cart =
+        "Your basket is empty";
     }
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return (
+      Object.keys(newErrors)
+        .length === 0
+    );
   };
 
-  // ✅ Handle change
+  // =========================
+  // HANDLE CHANGE
+  // =========================
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+    } = e.target;
 
-    // ✅ Name only letters
-    if (name === "name") {
-      if (!/^[a-zA-Z\s]*$/.test(value)) return;
+    if (
+      name === "name"
+    ) {
+      if (
+        !/^[a-zA-Z\s]*$/.test(
+          value
+        )
+      ) {
+        return;
+      }
     }
 
-    // ✅ Phone only numbers
-    if (name === "phone") {
-      if (!/^\d*$/.test(value)) return;
+    if (
+      name === "phone"
+    ) {
+      if (
+        !/^\d*$/.test(
+          value
+        )
+      ) {
+        return;
+      }
+
+      if (
+        value.length > 15
+      ) {
+        return;
+      }
     }
 
     setCustomer((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
-  const handleWhatsAppOrder = () => {
-    if (!cart.length) {
-      alert("Your cart is empty!");
-      return;
-    }
+  // =========================
+  // PLACE ORDER
+  // =========================
+  const handlePlaceOrder =
+    async (e) => {
+      e.preventDefault();
 
-    setWhatsappModalOpen(true);
-  };
+      if (!validate()) return;
 
-  const handlePlaceOrder = async (e) => {
-    e.preventDefault();
+      setStatus("sending");
 
-    if (!validate()) return;
+      // =========================
+      // ORDER NUMBER
+      // =========================
+      const now =
+        new Date();
 
-    setStatus("sending");
+      const year =
+        now.getFullYear();
 
-    const itemsTableRows = cart
-  .map(
-    (item, index) => `
-      <tr style="border-bottom:1px solid #f0f0f0;">
+      const month =
+        String(
+          now.getMonth() + 1
+        ).padStart(2, "0");
 
-        <!-- Product Image -->
-        <td style="padding:16px 12px; width:90px;">
-          <img
-            src="${item.image}"
-            alt="${item.name}"
-            width="70"
-            height="70"
+      const date =
+        String(
+          now.getDate()
+        ).padStart(2, "0");
+
+      const datePrefix = `${year}${month}${date}`;
+
+      const storageKey = `orderCounter_${datePrefix}`;
+
+      let currentCounter =
+        parseInt(
+          localStorage.getItem(
+            storageKey
+          )
+        ) || 0;
+
+      currentCounter += 1;
+
+      localStorage.setItem(
+        storageKey,
+        currentCounter
+      );
+
+      const orderId = `${datePrefix}${currentCounter}`;
+
+      // =========================
+      // PRODUCT TABLE
+      // =========================
+      const itemsTableRows =
+        cart
+          .map(
+            (
+              item,
+              index
+            ) => `
+        <tr style="border-bottom:1px solid #f0f0f0;">
+
+          <td style="padding:16px 12px; width:90px;">
+            <img
+              src="${item.image}"
+              alt="${item.name}"
+              width="70"
+              height="70"
+              style="
+                width:70px;
+                height:70px;
+                object-fit:cover;
+                border-radius:12px;
+                border:1px solid #eee;
+              "
+            />
+          </td>
+
+          <td style="padding:16px 12px;">
+            <div
+              style="
+                font-weight:700;
+                color:#222;
+                margin-bottom:6px;
+                font-size:15px;
+              "
+            >
+              ${item.name}
+            </div>
+
+            ${
+              item.variant
+                ? `
+              <div style="font-size:13px;color:#777;margin-bottom:4px;">
+                Variant: ${item.variant}
+              </div>
+            `
+                : ""
+            }
+
+            ${
+              item.weight
+                ? `
+              <div style="font-size:13px;color:#777;margin-bottom:4px;">
+                Weight: ${item.weight}
+              </div>
+            `
+                : ""
+            }
+          </td>
+
+          <td
             style="
-              width:70px;
-              height:70px;
-              object-fit:cover;
-              border-radius:12px;
-              border:1px solid #eee;
-            "
-          />
-        </td>
-
-        <!-- Product Details -->
-        <td style="padding:16px 12px;">
-          <div
-            style="
-              font-weight:700;
-              color:#222;
-              margin-bottom:6px;
-              font-size:15px;
+              padding:16px 12px;
+              text-align:center;
+              font-weight:600;
             "
           >
-            ${item.name}
-          </div>
+            ${item.qty}
+          </td>
 
-          ${
-            item.variant
-              ? `
-            <div style="font-size:13px;color:#777;margin-bottom:4px;">
-              Variant: ${item.variant}
-            </div>
-          `
-              : ""
-          }
+          <td
+            style="
+              padding:16px 12px;
+              text-align:center;
+              font-weight:600;
+            "
+          >
+            €${item.price.toFixed(
+              2
+            )}
+          </td>
 
-          ${
-            item.weight
-              ? `
-            <div style="font-size:13px;color:#777;margin-bottom:4px;">
-              Weight: ${item.weight}
-            </div>
-          `
-              : ""
-          }
+          <td
+            style="
+              padding:16px 12px;
+              text-align:right;
+              font-weight:700;
+              color:#BA5C1E;
+            "
+          >
+            €${(
+              item.price *
+              item.qty
+            ).toFixed(2)}
+          </td>
+        </tr>
+      `
+          )
+          .join("");
 
-          ${
-            item.description
-              ? `
-            <div style="font-size:12px;color:#888;line-height:1.5;">
-              ${item.description}
-            </div>
-          `
-              : ""
-          }
-        </td>
+      const fullPhone = `${customer.countryCode}${customer.phone}`;
 
-        <!-- Qty -->
-        <td
-          style="
-            padding:16px 12px;
-            text-align:center;
-            font-weight:600;
-          "
-        >
-          ${item.qty}
-        </td>
-
-        <!-- Price -->
-        <td
-          style="
-            padding:16px 12px;
-            text-align:center;
-            font-weight:600;
-          "
-        >
-          €${item.price.toFixed(2)}
-        </td>
-
-        <!-- Total -->
-        <td
-          style="
-            padding:16px 12px;
-            text-align:right;
-            font-weight:700;
-            color:#BA5C1E;
-          "
-        >
-          €${(item.price * item.qty).toFixed(2)}
-        </td>
-      </tr>
-    `
-  )
-  .join("");
-
-    const orderId = `ORD-${Date.now()}`;
-
-    const now = new Date();
-
-    // ✅ Full phone
-    const fullPhone = `${customer.countryCode}${customer.phone}`;
-
-    // ✅ Full address
-    const fullAddress = `
+      const fullAddress = `
 ${customer.street} ${customer.houseNo},
 ${customer.zipCode},
 ${customer.city},
 ${customer.country}
-    `;
+`;
 
-    const baseParams = {
-      email: customer.email.trim(),
+      const baseParams = {
+        email:
+          customer.email.trim(),
 
-      customer_name: customer.name.trim(),
+        customer_name:
+          customer.name.trim(),
 
-      customer_email: customer.email.trim(),
+        customer_email:
+          customer.email.trim(),
 
-      customer_phone: fullPhone,
+        customer_phone:
+          fullPhone,
 
-      customer_company: customer.company || "Not provided",
+        customer_company:
+          customer.company ||
+          "Not provided",
 
-      customer_address: fullAddress,
+        customer_address:
+          fullAddress,
 
-      customer_street: customer.street,
-      customer_house_no: customer.houseNo,
-      customer_zip_code: customer.zipCode,
-      customer_city: customer.city,
-      customer_country: customer.country,
+        customer_street:
+          customer.street,
 
-      notes: customer.notes || "No notes",
+        customer_house_no:
+          customer.houseNo,
 
-      order_id: orderId,
+        customer_zip_code:
+          customer.zipCode,
 
-      order_date: now.toLocaleString(),
+        customer_city:
+          customer.city,
 
-      total: total.toFixed(2),
+        customer_country:
+          customer.country,
 
-      year: now.getFullYear(),
+        notes:
+          customer.notes ||
+          "No notes",
 
-      items_table: itemsTableRows,
-    };
+        order_id: orderId,
 
-    try {
-      // ✅ Customer email
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        TEMPLATE_CUSTOMER_ID,
-        baseParams,
-        EMAILJS_PUBLIC_KEY
-      );
+        order_date:
+          now.toLocaleString(),
 
-      // ✅ Admin email
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        TEMPLATE_ADMIN_ID,
-        {
-          ...baseParams,
-          email: "info@korekernel.nl",
-        },
-        EMAILJS_PUBLIC_KEY
-      );
+        total:
+          total.toFixed(2),
 
-      // ✅ Google sheet
+        year:
+          now.getFullYear(),
+
+        items_table:
+          itemsTableRows,
+      };
+
       try {
-        await fetch(SHEET_WEBHOOK_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/json",
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          TEMPLATE_CUSTOMER_ID,
+          baseParams,
+          EMAILJS_PUBLIC_KEY
+        );
+
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          TEMPLATE_ADMIN_ID,
+          {
+            ...baseParams,
+            email:
+              "info@korekernel.nl",
           },
-          body: JSON.stringify(baseParams),
+          EMAILJS_PUBLIC_KEY
+        );
+
+        try {
+          await fetch(
+            SHEET_WEBHOOK_URL,
+            {
+              method:
+                "POST",
+
+              mode: "no-cors",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify(
+                baseParams
+              ),
+            }
+          );
+        } catch (err) {
+          console.error(err);
+        }
+
+        dispatch({
+          type:
+            "PLACE_ORDER",
+
+          payload: {
+            customer,
+            orderId,
+          },
         });
-      } catch (err) {
-        console.error(err);
+
+        setOrderPlacedId(
+          orderId
+        );
+
+        setCustomer({
+          name: "",
+          company: "",
+          email: "",
+
+          countryCode:
+            "+31",
+
+          phone: "",
+
+          street: "",
+          houseNo: "",
+          zipCode: "",
+          city: "",
+          country: "",
+
+          notes: "",
+        });
+
+        setErrors({});
+
+        setStatus(
+          "success"
+        );
+
+        setResultType(
+          "success"
+        );
+
+        setResultModalOpen(
+          true
+        );
+      } catch (error) {
+        console.error(
+          error
+        );
+
+        setStatus(
+          "error"
+        );
+
+        setResultType(
+          "error"
+        );
+
+        setResultModalOpen(
+          true
+        );
       }
-
-      dispatch({
-        type: "PLACE_ORDER",
-        payload: {
-          customer,
-          orderId,
-        },
-      });
-
-      setOrderPlacedId(orderId);
-
-      // ✅ Reset form
-      setCustomer({
-        name: "",
-        company: "",
-        email: "",
-
-        countryCode: "+31",
-        phone: "",
-
-        street: "",
-        houseNo: "",
-        zipCode: "",
-        city: "",
-        country: "",
-
-        notes: "",
-      });
-
-      setErrors({});
-      setStatus("success");
-
-      // ✅ Success modal
-      setResultType("success");
-      setResultModalOpen(true);
-
-    } catch (error) {
-      console.error(error);
-
-      setStatus("error");
-
-      // ✅ Error modal
-      setResultType("error");
-      setResultModalOpen(true);
-    }
-  };
+    };
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-8">
